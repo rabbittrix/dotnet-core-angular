@@ -1,0 +1,55 @@
+<div class="form-inline">
+  <div class="form-gorup mb-2">
+    <label class="mr-2">Filter: ...<input type="text" 
+    class="form-control mr-2" 
+    placeholder="Search"
+    [(ngModel)]="filterList">
+    </label> 
+  </div>
+</div>
+<h3>Filter: {{filterList}}</h3>
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>      
+      <th>
+        <button class="btn btn-outline-light"
+        (click)="removeImage()">
+        Show Image
+      </button>
+      </th>
+      <th>#</th>
+      <th>Theme</th>
+      <th>Place</th>
+      <th>Date</th>
+      <th>Qtd-People</th>
+      <th>Lot</th>
+      <th>Options</th>
+    </tr>
+  </thead>
+  <tbody *ngIf="events && events.length">
+    <tr *ngFor="let event of eventsFiltered">      
+      <td>
+        <img *ngIf="showImage" 
+        src="http://localhost:5000/img/{{event.imageUrl}}" 
+        [style.width.px]="imageWidth"
+        [style.margin.px]="imageMargin">
+      </td>
+      <td>{{event.eventId}}</td>
+      <td>{{event.thema}}</td>
+      <td>{{event.place}}</td>
+      <td>{{event.date}}</td>
+      <td>{{event.people}}</td>
+      <td>{{event.lot |uppercase}}</td>
+      <td>{{event.options}}</td>
+    </tr>
+  </tbody>
+  <tfoot *ngIf="!events.length">
+    <tr>
+      <td colspan="7" class="text-center">
+        <h4>No events found</h4>
+      </td>
+    </tr>
+  </tfoot>
+</table>
+
+
