@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { EventService } from '../_services/event.service';
+import { Event } from '../_models/Event';
 
 @Component({
   selector: 'app-events',
@@ -17,40 +18,23 @@ export class EventsComponent implements OnInit {
     this.eventsFiltered = this.filterList ? this.filterEvents(this.filterList) : this.events;
   }
 
-  eventsFiltered: any [];
-  events: any = [];
+  eventsFiltered: Event[];
+  events: Event[];
   imageWidth = 50;
   imageMargin = 2;
   showImage = false;
-  /* = [
-    {
-      EventId: 1,
-      Theme: 'Angular',
-      Place: 'Lisbon'
-    },
-    {
-      EventId: 2,
-      Theme: '.Net Core',
-      Place: 'Netherland'
-    },
-    {
-      EventId: 3,
-      Theme: 'Node.js',
-      Place: 'Brazil'
-    }
-  ];*/
 
-  constructor(private http: HttpClient) { }
+  constructor(private eventService: EventService ) { }
 
   ngOnInit() {
     this.getEvents();
   }
 
-  filterEvents(filterFor: string): any {
+  filterEvents(filterFor: string): Event[] {
     filterFor = filterFor.toLocaleLowerCase();
-    return this.events.filter(
-      event => event.theme.toLocaleLowerCase().indexOf(filterFor) !== -1
-    );
+    return this.events.filter(event => {
+      return event.theme.toLocaleLowerCase().includes(filterFor)
+    });
   }
 
   removeImage() {
@@ -58,9 +42,11 @@ export class EventsComponent implements OnInit {
   }
 
   getEvents(){
-    this.http.get('http://localhost:5000/api/values').subscribe(response => {
-      this.events = response;
+    this.eventService.getAllEvent().subscribe(
+      (_events: Event[]) => {
+      this.events = _events;
       this.eventsFiltered = this.events;
+      console.log(_events);
     }, error => {
       console.log(error);
     });
