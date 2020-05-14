@@ -83,4 +83,125 @@
 </div>
 </ng-template>
 
+<form [formGroup]="registerForm">
+  <div class="form-row">
+    <div class="form-group col-md-12">
+      <label>Theme</label>
+      <input type="text" formControlName="theme" class="form-control"
+        [ngClass]="{'is-invalid': registerForm.get('theme').errors && registerForm.get('theme').touched}"
+        placeholder="Insert theme">
+      <div *ngIf="registerForm.get('theme').hasError('required') 
+      && registerForm.get('theme').touched" class="invalid-feedback">
+        Theme is required
+      </div>
+      <div *ngIf="registerForm.get('theme').hasError('min') 
+      && registerForm.get('theme').touched" class="invalid-feedback">
+        Theme must be at least 3 characters
+      </div>
+      <div *ngIf="registerForm.get('theme').hasError('max') 
+      && registerForm.get('theme').touched" class="invalid-feedback">
+        Theme must have a maximum of 50 characters
+      </div>
+    </div>
+  </div>  
+  <div class="form-row">
+    <div class="form-group col-md-8">
+      <label>Place</label>
+      <input type="text" class="form-control" 
+      [ngClass]="{'is-invalid': registerForm.get('place').errors
+        && registerForm.get('place').touched}"
+      formControlName="place" placeholder="Insert place">
+      <div *ngIf="registerForm.get('place').hasError('required')
+        && registerForm.get('place').touched" 
+      class="invalid-feedback">
+        Place is required
+      </div>
+    </div>
+    <div class="form-group col-md-4">
+      <label>Date and time</label>
+      <input type="text" class="form-control" 
+      bsDatepicker
+      [bsConfig]="{ dateInputFormat : 'DD/MM/YYYY - hh:mm a'}"
+      [ngClass]="{'is-invalid': registerForm.get('dateEvent').errors
+        && registerForm.get('dateEvent').touched}"
+        formControlName="dateEvent" placeholder="Insert date and time">            
+        <div *ngIf="registerForm.get('dateEvent').hasError('required')
+        && registerForm.get('dateEvent').touched" 
+        class="invalid-feedback">
+        Date and Time is required
+      </div>
+    </div>
+  </div>  
+  <div class="form-row">
+    <div class="form-group col-md-3">
+      <label>Qty People</label>
+      <input type="text" 
+      [ngClass]="{'is-invalid': registerForm.get('qtdPerson').errors
+        && registerForm.get('qtdPerson').touched}"
+      class="form-control" formControlName="qtdPerson" placeholder="Insert Qty Person">
+      <div *ngIf="registerForm.get('qtdPerson').hasError('required')
+      && registerForm.get('qtdPerson').touched"
+      class="invalid-feedback">
+        Qty Person is required
+      </div>
+      <div *ngIf="registerForm.get('qtdPerson').hasError('max')
+      && registerForm.get('qtdPerson').touched"
+      class="invalid-feedback">
+        Qty of people must be less than 200 thousand.
+      </div>
+    </div>
+    <div class="form-group col-md-9">
+      <label>Image</label>
+      <input type="text" [ngClass]="{'is-invalid': registerForm.get('imageUrl').errors
+      && registerForm.get('imageUrl').touched}"
+      class="form-control" formControlName="imageUrl" placeholder="Insert image">
+      <div *ngIf="registerForm.get('imageUrl').hasError('required')
+      && registerForm.get('imageUrl').touched"
+      class="invalid-feedback">
+        Image is required
+      </div>
+    </div>
+  </div>  
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <label>Phone</label>
+      <input type="text" 
+      [ngClass]="{'is-invalid': registerForm.get('phone').errors
+      && registerForm.get('phone').touched}"
+      class="form-control" formControlName="phone" placeholder="Insert phone">
+      <div *ngIf="registerForm.get('phone').hasError('required')
+      && registerForm.get('phone').touched"
+      class="invalid-feedback">
+        Phone is required
+      </div>
+    </div>
+    <div class="form-group col-md-8">
+      <label>Email</label>
+      <input type="text" 
+      [ngClass]="{'is-invalid': registerForm.get('email').errors
+      && registerForm.get('email').touched}"
+      class="form-control" formControlName="email" placeholder="Insert email">
+      <div *ngIf="registerForm.get('email').hasError('required')
+      && registerForm.get('email').touched"
+      class="invalid-feedback">
+        E-mail is required
+      </div>
+      <div *ngIf="registerForm.get('email').hasError('email')
+      && registerForm.get('email').touched"
+      class="invalid-feedback">
+        Fill a valid email
+      </div>
+    </div>
+  </div> 
+</form>
+<br>
+<button class="btn btn-secondary" (click)="openModal(template)">
+  Close
+</button>
+<button class="btn btn-primary" [disabled]="!registerForm.valid" (click)="saveChange()">
+  Save Changes
+</button>
+<br>
+<br>
+
 
