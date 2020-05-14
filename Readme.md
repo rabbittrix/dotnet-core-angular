@@ -78,6 +78,8 @@ ng generate component xyz
 ## Bootstrap
 npm i --save bootstrap @fortawesome/fontawesome-free
 
+npm i ngx-bootstrap --save
+
 # ProApiApp
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.5.

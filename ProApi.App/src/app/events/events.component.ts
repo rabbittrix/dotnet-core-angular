@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { EventService } from '../_services/event.service';
 import { Event } from '../_models/Event';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-events',
@@ -9,7 +10,20 @@ import { Event } from '../_models/Event';
 })
 export class EventsComponent implements OnInit {
 
-  _filterList: string;
+  eventsFiltered: Event[];
+  events: Event[];
+  imageWidth = 50;
+  imageMargin = 2;
+  showImage = false;
+  modalRef: BsModalRef;
+
+  _filterList = '';
+  
+  constructor(
+    private eventService: EventService,
+    private modalService: BsModalService
+    ) { }
+
   get filterList(): string{
     return this._filterList;
   }
@@ -18,13 +32,9 @@ export class EventsComponent implements OnInit {
     this.eventsFiltered = this.filterList ? this.filterEvents(this.filterList) : this.events;
   }
 
-  eventsFiltered: Event[];
-  events: Event[];
-  imageWidth = 50;
-  imageMargin = 2;
-  showImage = false;
-
-  constructor(private eventService: EventService ) { }
+  openModal(template: TemplateRef<any>){
+    this.modalRef = this.modalService.show(template);
+  }
 
   ngOnInit() {
     this.getEvents();
