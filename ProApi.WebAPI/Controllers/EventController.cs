@@ -82,7 +82,7 @@ namespace ProApi.WebAPI.Controllers
                    return Created($"/api/event/{model.Id}", model);
                }
            }
-           catch (System.Exception)
+           catch (System.Exception ex)
            {               
                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failed");
            }
@@ -104,7 +104,7 @@ namespace ProApi.WebAPI.Controllers
                     return Ok();
                 }
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou");
             }
