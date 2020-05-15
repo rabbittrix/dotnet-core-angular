@@ -25,6 +25,7 @@ export class EventsComponent implements OnInit {
   modalRef: BsModalRef;
   registerForm: FormGroup;
 
+  // tslint:disable-next-line: variable-name
   _filterList = '';
 
   constructor(
@@ -45,7 +46,7 @@ export class EventsComponent implements OnInit {
   }
 
   openModal(template: any){
-    //this.modalRef = this.modalService.show(template);
+    // this.modalRef = this.modalService.show(template);
     this.registerForm.reset();
     template.show();
   }
@@ -58,7 +59,7 @@ export class EventsComponent implements OnInit {
   filterEvents(filterFor: string): Event[] {
     filterFor = filterFor.toLocaleLowerCase();
     return this.events.filter(event => {
-      return event.theme.toLocaleLowerCase().includes(filterFor)
+      return event.theme.toLocaleLowerCase().includes(filterFor);
     });
   }
 
@@ -81,14 +82,14 @@ export class EventsComponent implements OnInit {
   }
 
   saveChange(template: any){
-    if(this.registerForm.valid){
+    if (this.registerForm.valid){
       this.event = Object.assign({}, this.registerForm.value);
       this.eventService.postEventById(this.event).subscribe(
-        (newEvent: Event)=>{
+        (newEvent: Event) => {
           console.log(newEvent);
           template.hide();
           this.getEvents();
-        }, error =>{
+        }, error => {
           console.error(error);
         }
       );
@@ -97,6 +98,7 @@ export class EventsComponent implements OnInit {
 
   getEvents(){
     this.eventService.getAllEvent().subscribe(
+      // tslint:disable-next-line: variable-name
       (_events: Event[]) => {
       this.events = _events;
       this.eventsFiltered = this.events;
