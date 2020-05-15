@@ -1,12 +1,13 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { EventService } from '../_services/event.service';
 import { Event } from '../_models/Event';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
-import { ukLocale } from 'ngx-bootstrap/locale';
+import { enGbLocale } from 'ngx-bootstrap/locale';
 import { defineLocale } from 'ngx-bootstrap/chronos';
-defineLocale('pt-PT', ukLocale);
+import { templateJitUrl } from '@angular/compiler';
+defineLocale('en-us', enGbLocale);
 
 @Component({
   selector: 'app-events',
@@ -17,6 +18,7 @@ export class EventsComponent implements OnInit {
 
   eventsFiltered: Event[];
   events: Event[];
+  event: Event;
   imageWidth = 50;
   imageMargin = 2;
   showImage = false;
@@ -30,8 +32,8 @@ export class EventsComponent implements OnInit {
     private modalService: BsModalService,
     private fb: FormBuilder,
     private localeService: BsLocaleService
-    ) { 
-      this.localeService.use('pt-PT');
+    ) {
+      this.localeService.use('en-us');
   }
 
   get filterList(): string{
@@ -42,8 +44,10 @@ export class EventsComponent implements OnInit {
     this.eventsFiltered = this.filterList ? this.filterEvents(this.filterList) : this.events;
   }
 
-  openModal(template: TemplateRef<any>){
-    this.modalRef = this.modalService.show(template);
+  openModal(template: any){
+    //this.modalRef = this.modalService.show(template);
+    this.registerForm.reset();
+    template.show();
   }
 
   ngOnInit() {
@@ -76,8 +80,19 @@ export class EventsComponent implements OnInit {
     });
   }
 
-  saveChange(){
-
+  saveChange(template: any){
+    if(this.registerForm.valid){
+      this.event = Object.assign({}, this.registerForm.value);
+      this.eventService.postEventById(this.event).subscribe(
+        (newEvent: Event)=>{
+          console.log(newEvent);
+          template.hide();
+          this.getEvents();
+        }, error =>{
+          console.error(error);
+        }
+      );
+    }
   }
 
   getEvents(){
