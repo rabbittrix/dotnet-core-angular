@@ -6,7 +6,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { enGbLocale } from 'ngx-bootstrap/locale';
 import { defineLocale } from 'ngx-bootstrap/chronos';
-//import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 defineLocale('en-us', enGbLocale);
 
 @Component({
@@ -35,7 +35,7 @@ export class EventsComponent implements OnInit {
     private modalService: BsModalService,
     private fb: FormBuilder,
     private localeService: BsLocaleService,
-    // private toastr: ToastrService
+    private toastr: ToastrService
     ) {
       this.localeService.use('en-us');
   }
@@ -65,15 +65,15 @@ export class EventsComponent implements OnInit {
     this.event = event;
     this.bodyDeleteEvent = `Are you sure you want to delete the Event: Code: ${event.id}, ${event.theme}`;
   }
-  
+
   confirmDelete(event: Event, template: any) {
     this.eventService.deleteEvent(this.event.id).subscribe(
       () => {
           template.hide();
           this.getEvents();
-          //this.toastr.success('Successfully deleted');
+          this.toastr.success('Successfully deleted');
         }, error => {
-          //this.toastr.error('Error when trying to Delete');
+          this.toastr.error('Error when trying to Delete');
           console.log(error);
         }
     );
@@ -123,21 +123,23 @@ export class EventsComponent implements OnInit {
           (newEvent: Event) => {
             template.hide();
             this.getEvents();
+            this.toastr.success('Successfully inserted');
           }, error => {
-            console.error(error);
+            this.toastr.success(`Error inserted: ${error}`);
           }
         );
       }else {
         this.event = Object.assign({id: this.event.id}, this.registerForm.value);
-          this.eventService.putEventById(this.event).subscribe(
+        this.eventService.putEventById(this.event).subscribe(
           () => {
             template.hide();
             this.getEvents();
+            this.toastr.success('Successfully edited');
           }, error => {
-            console.error(error);
+            this.toastr.success(`Error edited: ${error}`);
           }
         );
-      }      
+      }
     }
   }
 
@@ -147,9 +149,8 @@ export class EventsComponent implements OnInit {
       (_events: Event[]) => {
       this.events = _events;
       this.eventsFiltered = this.events;
-      console.log(_events);
     }, error => {
-      console.log(error);
+      this.toastr.success(`Error trying to load events: ${error}`);
     });
   }
 

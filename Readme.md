@@ -69,11 +69,14 @@ alt + click
 ## Command Angular
 npm i -g @angular/cli
 
+npm i ngx-toastr --save
+
 ng new <name>
 
 ng serve -o (open browser)
 
 ng generate component xyz
+
 
 ## Bootstrap
 npm i --save bootstrap @fortawesome/fontawesome-free
