@@ -30,6 +30,7 @@ namespace ProApi.WebAPI
             services.AddControllers();
             services.AddDbContext<ProApiContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IProApiRepository, ProApiRepository>();
+            services.AddAutoMapper();
             services.AddMvc(option => option.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.AddCors();
         }

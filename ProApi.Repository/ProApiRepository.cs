@@ -9,6 +9,7 @@ namespace ProApi.Repository
   public class ProApiRepository : IProApiRepository
   {
     private readonly ProApiContext _context;
+    
     public ProApiRepository(ProApiContext context){
       _context = context;
       _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
@@ -48,7 +49,7 @@ namespace ProApi.Repository
           .ThenInclude(sp => sp.Speakers);
         }
         query = query.AsNoTracking()
-        .OrderByDescending(c => c.DateEvent);
+        .OrderBy(c => c.Id);
         return await query.ToArrayAsync();
     }
 
@@ -82,7 +83,7 @@ namespace ProApi.Repository
           .ThenInclude(sp => sp.Speakers);
         }
         query = query.AsNoTracking()
-          .OrderByDescending(c => c.DateEvent)
+          .OrderBy(c => c.Id)
           .Where(c => c.Id == EventId);
         return await query.FirstOrDefaultAsync();
     }    

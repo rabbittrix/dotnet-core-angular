@@ -35,7 +35,7 @@ export class EventsComponent implements OnInit {
     private modalService: BsModalService,
     private fb: FormBuilder,
     private localeService: BsLocaleService,
-    //private toastr: ToastrService
+    // private toastr: ToastrService
     ) {
       this.localeService.use('en-us');
   }

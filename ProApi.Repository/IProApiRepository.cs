@@ -9,7 +9,8 @@ namespace ProApi.Repository
          void Add<T>(T entity) where T : class;
          void Update<T>(T entity) where T : class;
          void Delete<T>(T entity) where T : class;
-         Task<bool> SaveChangeAsync();
+         void DeleteRange<T>(T[] entity) where T : class;
+         Task<bool> SaveChangesAsync();
 
          //Events
          Task<Event[]> GetAllEventAsyncByTheme(string theme, bool includeSpeakers);
