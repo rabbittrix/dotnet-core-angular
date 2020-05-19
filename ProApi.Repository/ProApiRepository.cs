@@ -31,7 +31,12 @@ namespace ProApi.Repository
       _context.Remove(entity);
     }
 
-    public async Task<bool> SaveChangeAsync()
+    public void DeleteRange<T>(T[] entityArray) where T : class
+    {
+      _context.RemoveRange(entityArray);
+    }
+
+    public async Task<bool> SaveChangesAsync()
     {
       return (await _context.SaveChangesAsync()) > 0;
     }  
@@ -118,7 +123,6 @@ namespace ProApi.Repository
         query = query.AsNoTracking()
         .Where(s => s.Name.ToLower().Contains(name.ToLower()));
         return await query.ToArrayAsync();
-    }
-
+    }    
   }
 }

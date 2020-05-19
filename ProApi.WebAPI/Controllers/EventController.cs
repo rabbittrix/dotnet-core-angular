@@ -31,7 +31,7 @@ namespace ProApi.WebAPI.Controllers
       try
       {
         var events = await _repo.GetAllEventAsync(true);
-        var results = _Mapper.Map<EventDto[]>(events);
+        var results = _mapper.Map<EventDto[]>(events);
         return Ok(results);
       }
       catch (System.Exception)
@@ -39,6 +39,36 @@ namespace ProApi.WebAPI.Controllers
         return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failed");
       }
     }
+
+    [HttpPost("upload")]
+        public async Task<IActionResult> Upload()
+        {
+            try
+            {
+                var file = Request.Form.Files[0];
+                var folderName = Path.Combine("Resources", "Images");
+                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+
+                if (file.Length > 0)
+                {
+                    var filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName;
+                    var fullPath = Path.Combine(pathToSave, filename.Replace("\"", " ").Trim());
+
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+                }
+
+                return Ok();
+            }
+            catch (System.Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failed {ex.Message}");
+            }
+
+            return BadRequest("Error trying to upload");
+        }
 
     [HttpGet("{EventId}")]
     public async Task<IActionResult> Get(int EventId)
@@ -77,7 +107,7 @@ namespace ProApi.WebAPI.Controllers
         {
             var GetEventAsyncById = _mapper.Map<Event>(model);
             _repo.Add(GetEventAsyncById);
-            if (await _repo.SaveChangeAsync())
+            if (await _repo.SaveChangesAsync())
             {
             return Created($"/api/event/{model.Id}", _mapper.Map<EventDto>(GetEventAsyncById));
             }
@@ -99,7 +129,7 @@ namespace ProApi.WebAPI.Controllers
 
             _mapper.Map(model, GetEventAsyncById);
             _repo.Update(GetEventAsyncById);
-            if (await _repo.SaveChangeAsync())
+            if (await _repo.SaveChangesAsync())
             {
             return Created($"/api/event/{model.Id}", _mapper.Map<EventDto>(GetEventAsyncById));
             }

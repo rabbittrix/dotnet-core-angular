@@ -11,19 +11,19 @@ namespace ProApi.WebAPI.Helpers
         public AutoMapperProfiles()     
         {
             CreateMap<Event, EventDto>()
-                .ForMember(dest => dest.Speakes, opt => {
-                    opt.MapFrom(src => src.SpeakesEvents.Select(
-                        x => x.Speaker).ToList());
-                }).reverseMap(); 
+                .ForMember(dest => dest.Speakers, opt => {
+                    opt.MapFrom(src => src.SpeakerEvents.Select(
+                        x => x.Speakers).ToList());
+                }).ReverseMap(); 
                 
-            CreateMap<Speaker, SpeakeDto>()
+            CreateMap<Speaker, SpeakerDto>()
                 .ForMember(dest => dest.Events, opt =>{
-                    opt.MapFrom(src => src.SpeakesEvents.Select(
-                        x => x.Speaker).ToList());
-                }).reverseMap();
+                    opt.MapFrom(src => src.SpeakerEvents.Select(
+                        x => x.Speakers).ToList());
+                }).ReverseMap();
 
-            CreateMap<Lot, LotDto>().reverseMap();
-            CreateMap<SocialNetwork, SocialNetworkDto>().reverseMap();
+            CreateMap<Lot, LotDto>().ReverseMap();
+            CreateMap<SocialNetwork, SocialNetworkDto>().ReverseMap();
         }
     }
 }
