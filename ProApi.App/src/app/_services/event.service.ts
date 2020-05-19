@@ -21,11 +21,19 @@ export class EventService {
     return this.http.get<Event[]>(`${this.baseURL}/${id}`);
   }
   // Post
-  postEventById(event: Event){
+  postUpload(file: File, name: string) {
+    const fileToUplaod = file[0] as File;
+    const formData = new FormData();
+    formData.append('file', fileToUplaod, name);
+
+    return this.http.post(`${this.baseURL}/upload`, formData);
+  }
+
+  postEvent(event: Event){
     return this.http.post(this.baseURL, event);
   }
 
-  putEventById(event: Event){
+  putEvent(event: Event){
     return this.http.put(`${this.baseURL}/${event.id}`, event);
   }
 

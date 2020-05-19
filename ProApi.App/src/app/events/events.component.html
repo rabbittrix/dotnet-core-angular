@@ -36,7 +36,9 @@
   <tbody *ngIf="events && events.length">
     <tr *ngFor="let event of eventsFiltered">
       <td>
-        <img *ngIf="showImage" src="http://localhost:5000/img/{{event.imageUrl}}" [style.width.px]="imageWidth"
+        <img *ngIf="showImage" 
+          src="http://localhost:5000/resources/images/{{event.imageUrl}}?_ts={{currentDate}}" 
+          [style.width.px]="imageWidth"
           [style.margin.px]="imageMargin">
       </td>
       <td>{{event.id}}</td>
@@ -133,7 +135,14 @@
             </div>
             <div class="form-group col-md-9">
               <label>Image</label>
-              <input type="text" [ngClass]="{'is-invalid': registerForm.get('imageUrl').errors && registerForm.get('imageUrl').touched}" class="form-control" formControlName="imageUrl" placeholder="Insert image">
+              <table>
+                <tr>
+                  <td>
+                    <button class="btn btn-success" (click)="file.click()"></button>
+                    <input type="file" #file [ngClass]="{'is-invalid': registerForm.get('imageUrl').errors && registerForm.get('imageUrl').touched}" (change)="onFileChange($event)" class="form-control" formControlName="imageUrl" placeholder="Insert image">
+                  </td>
+                </tr>
+              </table>              
               <div *ngIf="registerForm.get('imageUrl').hasError('required') && registerForm.get('imageUrl').touched" class="invalid-feedback">
                 Image is required
               </div>

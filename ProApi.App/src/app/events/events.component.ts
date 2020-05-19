@@ -28,6 +28,10 @@ export class EventsComponent implements OnInit {
   registerForm: FormGroup;
   bodyDeleteEvent = '';
 
+  file: File;
+  fileNameToUpdate: string;
+  currentDate: string;
+
   // tslint:disable-next-line: variable-name
   _filterList = '';
 
@@ -52,8 +56,10 @@ export class EventsComponent implements OnInit {
   editEvent(event: Event, template: any){
     this.modoSave = 'put';
     this.openModal(template);
-    this.event = event;
-    this.registerForm.patchValue(event);
+    this.event = Object.assign({}, event);
+    this.fileNameToUpdate = event.imageUrl.toString();
+    this.event.imageUrl = '';
+    this.registerForm.patchValue(this.event);
   }
 
   newEvent(template: any){
@@ -94,7 +100,7 @@ export class EventsComponent implements OnInit {
   filterEvents(filterFor: string): Event[] {
     filterFor = filterFor.toLocaleLowerCase();
     return this.events.filter(event => {
-      return event.theme.toLocaleLowerCase().includes(filterFor);
+    return event.theme.toLocaleLowerCase().includes(filterFor);
     });
   }
 
@@ -116,22 +122,61 @@ export class EventsComponent implements OnInit {
     });
   }
 
+  onFileChange(event){
+    const reader = new FileReader();
+
+    if (event.target.files && event.target.files.length) {
+      this.file = event.target.files;
+      console.log(this.file);
+    }
+  }
+
+  uploadImage() {
+    if (this.modoSave === 'post') {
+      const fileName = this.event.imageUrl.split('\\', 3);
+      this.event.imageUrl = fileName[2];
+
+      this.eventService.postUpload(this.file, fileName[2])
+        .subscribe(
+          () => {
+            this.currentDate = new Date().getMilliseconds().toString();
+            this.getEvents();
+          }
+        );
+    } else {
+      this.event.imageUrl = this.fileNameToUpdate;
+      this.eventService.postUpload(this.file, this.fileNameToUpdate)
+        .subscribe(
+          () => {
+            this.currentDate = new Date().getMilliseconds().toString();
+            this.getEvents();
+          }
+        );
+    }
+  }
+
   saveChange(template: any){
     if (this.registerForm.valid){
       if (this.modoSave === 'post'){
           this.event = Object.assign({}, this.registerForm.value);
-          this.eventService.postEventById(this.event).subscribe(
+
+          this.uploadImage();
+
+          this.eventService.postEvent(this.event).subscribe(
           (newEvent: Event) => {
             template.hide();
             this.getEvents();
-            this.toastr.success('Successfully inserted');
+            this.toastr.success('Successfully inserted!');
           }, error => {
-            this.toastr.success(`Error inserted: ${error}`);
+            this.toastr.error(`Error inserted: ${error}`);
           }
         );
-      }else {
-        this.event = Object.assign({id: this.event.id}, this.registerForm.value);
-        this.eventService.putEventById(this.event).subscribe(
+      } else {
+        this.event = Object.assign({ id: this.event.id }, this.registerForm.value);
+
+        this.uploadImage();
+
+        this.eventService.putEvent(this.event).subscribe(
           () => {
             template.hide();
             this.getEvents();
