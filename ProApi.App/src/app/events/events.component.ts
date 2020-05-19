@@ -16,6 +16,7 @@ defineLocale('en-us', enGbLocale);
 })
 export class EventsComponent implements OnInit {
 
+  title = 'Events';
   eventsFiltered: Event[];
   events: Event[];
   event: Event;

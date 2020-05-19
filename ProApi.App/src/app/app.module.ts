@@ -15,11 +15,19 @@ import { EventsComponent } from './events/events.component';
 import { NavComponent } from './nav/nav.component';
 
 import { DateTimeFormatPipePipe } from './_helps/DateTimeFormatPipe.pipe';
+import { SpeakersComponent } from './speakers/speakers.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { ContactsComponent } from './contacts/contacts.component';
+import { TitleComponent } from './_shared/title/title.component';
 @NgModule({
    declarations: [
       AppComponent,
-      EventsComponent,
       NavComponent,
+      EventsComponent,
+      SpeakersComponent,
+      DashboardComponent,
+      ContactsComponent,
+      TitleComponent,
       DateTimeFormatPipePipe
    ],
    imports: [
@@ -29,10 +37,10 @@ import { DateTimeFormatPipePipe } from './_helps/DateTimeFormatPipe.pipe';
       TooltipModule.forRoot(),
       ModalModule.forRoot(),
       ToastrModule.forRoot({
-         timeOut: 10000,
-         positionClass: 'toast-bottom-right',
-         preventDuplicates: true
-      }),
+         timeOut: 3000,
+         preventDuplicates: true,
+         progressBar: true
+       }),
       BrowserAnimationsModule,
       AppRoutingModule,
       HttpClientModule,
