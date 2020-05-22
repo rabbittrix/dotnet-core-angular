@@ -53,6 +53,8 @@ dotnet add package Microsoft.EntityFrameworkCore.SqlServer
 
 dotnet ef --startup-project ../ProApi.WebAPI migrations add init
 
+dotnet ef --startup-project ../ProApi.WebAPI database update
+
 ## Command C#
 ctor
 
