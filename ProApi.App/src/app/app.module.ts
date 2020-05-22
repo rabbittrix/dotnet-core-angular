@@ -19,6 +19,10 @@ import { SpeakersComponent } from './speakers/speakers.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ContactsComponent } from './contacts/contacts.component';
 import { TitleComponent } from './_shared/title/title.component';
+import { UserComponent } from './user/user.component';
+import { LoginComponent } from './user/login/login.component';
+import { RegistrationComponent } from './user/registration/registration.component';
+
 @NgModule({
    declarations: [
       AppComponent,
@@ -28,7 +32,10 @@ import { TitleComponent } from './_shared/title/title.component';
       DashboardComponent,
       ContactsComponent,
       TitleComponent,
-      DateTimeFormatPipePipe
+      DateTimeFormatPipePipe,
+      UserComponent,
+      LoginComponent,
+      RegistrationComponent
    ],
    imports: [
       BrowserModule,
