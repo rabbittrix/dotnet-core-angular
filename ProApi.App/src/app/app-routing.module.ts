@@ -7,6 +7,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { UserComponent } from './user/user.component';
 import { LoginComponent } from './user/login/login.component';
 import { RegistrationComponent } from './user/registration/registration.component';
+import { AuthGuard } from './auth/auth.guard';
 
 
 const routes: Routes = [
@@ -16,16 +17,17 @@ const routes: Routes = [
       {path: 'registration', component: RegistrationComponent}
     ]
   },
-  {path: 'events', component: EventsComponent},
-  {path: 'speakers', component: SpeakersComponent},
-  {path: 'dashboard', component: DashboardComponent},
-  {path: 'contacts', component: ContactsComponent},
+  {path: 'events', component: EventsComponent, canActivate: [AuthGuard]},
+  {path: 'speakers', component: SpeakersComponent, canActivate: [AuthGuard]},
+  {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
+  {path: 'contacts', component: ContactsComponent, canActivate: [AuthGuard]},
   {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
   {path: '**', redirectTo: 'dashboard', pathMatch: 'full'}
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  import { AuthGuard } from './auth/auth.guard';
+exports: [RouterModule]
 })
 export class AppRoutingModule { }
