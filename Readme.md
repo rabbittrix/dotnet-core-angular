@@ -26,6 +26,10 @@ dotnet restore
 
 dotnet watch run
 
+dotnet publish -o /Users/name/Desktop/ProApi
+
+dotnet ProApi.WebAPI.dll
+
 ## Entity Framework
 dotnet ef migrations add InitialCreate
 
@@ -78,6 +82,8 @@ ng new <name>
 ng serve -o (open browser)
 
 ng generate component xyz
+
+ng build --prod --source-map (deploy app angular)
 
 
 ## Bootstrap
