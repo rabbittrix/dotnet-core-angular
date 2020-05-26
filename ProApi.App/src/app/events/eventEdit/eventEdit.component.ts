@@ -5,7 +5,7 @@ import { EventService } from 'src/app/_services/event.service';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { ToastrService } from 'ngx-toastr';
-import { Event } from 'src/app/_models/Event';
+import {Event} from 'src/app/_models/Event';
 
 @Component({
   selector: 'app-event-edit',
