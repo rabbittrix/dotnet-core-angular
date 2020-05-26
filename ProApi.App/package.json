@@ -26,6 +26,7 @@
     "@auth0/angular-jwt": "^4.1.2",
     "@fortawesome/fontawesome-free": "^5.13.0",
     "bootstrap": "^4.4.1",
+    "bootswatch": "^4.5.0",
     "ngx-bootstrap": "^5.6.1",
     "ngx-currency": "^2.3.3",
     "ngx-mask": "^9.1.2",
@@ -50,6 +51,7 @@
     "karma-jasmine": "~3.0.1",
     "karma-jasmine-html-reporter": "^1.4.2",
     "protractor": "^7.0.0",
+    "source-map-explorer": "^2.4.2",
     "ts-node": "~8.3.0",
     "tslint": "^6.1.2",
     "typescript": "~3.8.3"
