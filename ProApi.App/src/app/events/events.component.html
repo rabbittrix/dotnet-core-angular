@@ -30,7 +30,7 @@
       <th>Date</th>
       <th>Qtd-People</th>
       <th>Lot</th>
-      <th>Options</th>
+      <th colspan="2" class="text-center">Options</th>
     </tr>
   </thead>
   <tbody *ngIf="events && events.length">
@@ -63,6 +63,11 @@
             <i class="fa fa-eraser"></i>
           </button>
         </div>
+      </td>
+      <td>
+        <a [routerLink]="['/event', event.id, 'edit']" tooltip="Detailed Editing" class="btn btn-sm btn-warning">
+          <i class="fa fa-edit"></i>
+        </a>
       </td>
     </tr>
   </tbody>
@@ -180,8 +185,6 @@
     </div>
   </div>
 </div>
-
-
 <div bsModal #confirm="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">

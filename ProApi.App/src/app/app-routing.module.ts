@@ -1,3 +1,4 @@
+import { EventEditComponent } from './events/eventEdit/eventEdit.component';
 import { ContactsComponent } from './contacts/contacts.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SpeakersComponent } from './speakers/speakers.component';
@@ -18,6 +19,7 @@ const routes: Routes = [
     ]
   },
   {path: 'events', component: EventsComponent, canActivate: [AuthGuard]},
+  {path: 'event/:id/edit', component: EventEditComponent, canActivate: [AuthGuard]},
   {path: 'speakers', component: SpeakersComponent, canActivate: [AuthGuard]},
   {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
   {path: 'contacts', component: ContactsComponent, canActivate: [AuthGuard]},
@@ -27,7 +29,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  import { AuthGuard } from './auth/auth.guard';
 exports: [RouterModule]
 })
 export class AppRoutingModule { }

@@ -190,6 +190,7 @@ export class EventsComponent implements OnInit {
   }
 
   getEvents(){
+    this.currentDate = new Date().getMilliseconds().toString();
     this.eventService.getAllEvent().subscribe(
       // tslint:disable-next-line: variable-name
       (_events: Event[]) => {

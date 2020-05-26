@@ -41,34 +41,34 @@ namespace ProApi.WebAPI.Controllers
     }
 
     [HttpPost("upload")]
-        public async Task<IActionResult> Upload()
+    public async Task<IActionResult> Upload()
+    {
+      try
+      {
+        var file = Request.Form.Files[0];
+        var folderName = Path.Combine("Resources", "Images");
+        var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+
+        if (file.Length > 0)
         {
-            try
-            {
-                var file = Request.Form.Files[0];
-                var folderName = Path.Combine("Resources", "Images");
-                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+          var filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName;
+          var fullPath = Path.Combine(pathToSave, filename.Replace("\"", " ").Trim());
 
-                if (file.Length > 0)
-                {
-                    var filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName;
-                    var fullPath = Path.Combine(pathToSave, filename.Replace("\"", " ").Trim());
-
-                    using (var stream = new FileStream(fullPath, FileMode.Create))
-                    {
-                        file.CopyTo(stream);
-                    }
-                }
-
-                return Ok();
-            }
-            catch (System.Exception ex)
-            {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failed {ex.Message}");
-            }
-
-            return BadRequest("Error trying to upload");
+          using (var stream = new FileStream(fullPath, FileMode.Create))
+          {
+            file.CopyTo(stream);
+          }
         }
+
+        return Ok();
+      }
+      catch (System.Exception ex)
+      {
+        return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failed {ex.Message}");
+      }
+
+      return BadRequest("Error trying to upload");
+    }
 
     [HttpGet("{EventId}")]
     public async Task<IActionResult> Get(int EventId)
@@ -82,86 +82,103 @@ namespace ProApi.WebAPI.Controllers
       catch (System.Exception)
       {
         return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failed");
-        }
+      }
     }
 
     [HttpGet("getByTheme/{theme}")]
     public async Task<IActionResult> Get(string theme)
     {
-        try
-        {
-            var events = await _repo.GetAllEventAsyncByTheme(theme, true);
-            var results = _mapper.Map<EventDto[]>(events);
-            return Ok(results);
-        }
-        catch (System.Exception)
-        {
-            return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failed");
-        }
+      try
+      {
+        var events = await _repo.GetAllEventAsyncByTheme(theme, true);
+        var results = _mapper.Map<EventDto[]>(events);
+        return Ok(results);
+      }
+      catch (System.Exception)
+      {
+        return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failed");
+      }
     }
 
     [HttpPost]
     public async Task<IActionResult> Post(EventDto model)
     {
-        try
+      try
+      {
+        var GetEventAsyncById = _mapper.Map<Event>(model);
+        _repo.Add(GetEventAsyncById);
+        if (await _repo.SaveChangesAsync())
         {
-            var GetEventAsyncById = _mapper.Map<Event>(model);
-            _repo.Add(GetEventAsyncById);
-            if (await _repo.SaveChangesAsync())
-            {
-            return Created($"/api/event/{model.Id}", _mapper.Map<EventDto>(GetEventAsyncById));
-            }
+          return Created($"/api/event/{model.Id}", _mapper.Map<EventDto>(GetEventAsyncById));
         }
-        catch (System.Exception)
-        {
-            return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failed");
-        }
-        return BadRequest();
+      }
+      catch (System.Exception)
+      {
+        return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failed");
+      }
+      return BadRequest();
     }
 
     [HttpPut("{EventId}")]
     public async Task<IActionResult> Put(int EventId, EventDto model)
     {
-        try
-        {
-            var GetEventAsyncById = await _repo.GetEventAsyncById(EventId, false);
-            if (GetEventAsyncById == null) return NotFound();
+      try
+      {
+        var GetEventAsyncById = await _repo.GetEventAsyncById(EventId, false);
+        if (GetEventAsyncById == null) return NotFound();
 
-            _mapper.Map(model, GetEventAsyncById);
-            _repo.Update(GetEventAsyncById);
-            if (await _repo.SaveChangesAsync())
-            {
-            return Created($"/api/event/{model.Id}", _mapper.Map<EventDto>(GetEventAsyncById));
-            }
-        }
-        catch (System.Exception ex)
+        var idLots = new List<int>();
+        var idSocialNetworks = new List<int>();
+
+        model.Lots.ForEach(item => idLots.Add(item.Id));
+        model.SocialNetworks.ForEach(item => idSocialNetworks.Add(item.Id));
+
+        var lots = evento.Lots.Where(
+            lot => !idLots.Contains(lot.Id)
+        ).ToArray();
+
+        var socialNetworks = evento.SocialNetworks.Where(
+            rede => !idLoes.Contains(rede.Id)
+        ).ToArray();
+
+        if (lots.Length > 0) _repo.DeleteRange(lotes);
+        if (socialNetworks.Length > 0) _repo.DeleteRange(socialNetworks);
+
+        _mapper.Map(model, GetEventAsyncById);
+        _repo.Update(GetEventAsyncById);
+        if (await _repo.SaveChangesAsync())
         {
-            return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failed");
+          return Created($"/api/event/{model.Id}", _mapper.Map<EventDto>(GetEventAsyncById));
         }
-        return BadRequest();
+      }
+      catch (System.Exception ex)
+      {
+        return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failed");
+      }
+      return BadRequest();
     }
 
     [HttpDelete("{EventId}")]
     public async Task<IActionResult> Delete(int EventId)
     {
-        try
+      try
+      {
+        var GetEventAsyncById = await _repo.GetEventAsyncById(EventId, false);
+        if (GetEventAsyncById == null) return NotFound();
+
+        _repo.Delete(GetEventAsyncById);
+
+        if (await _repo.SaveChangesAsync())
         {
-            var GetEventAsyncById = await _repo.GetEventAsyncById(EventId, false);
-            if (GetEventAsyncById == null) return NotFound();
-
-            _repo.Delete(GetEventAsyncById);
-
-            if (await _repo.SaveChangesAsync())
-            {
-            return Ok();
-            }
+          return Ok();
         }
-        catch (System.Exception)
-        {
-            return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou");
-        }
+      }
+      catch (System.Exception)
+      {
+        return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou");
+      }
 
-        return BadRequest();
+      return BadRequest();
     }
-  } 
+  }
 }
