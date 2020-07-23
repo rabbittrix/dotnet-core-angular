@@ -18,9 +18,7 @@ dotnet run
 
 dotnet sln
 
-dotnet add 
-
-dotnet sln 
+dotnet add  
 
 dotnet restore
 
